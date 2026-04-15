@@ -55,4 +55,3 @@ public class HospitalisationResponseDTO {
     public void setPrenomPatient(String prenomPatient) { this.prenomPatient = prenomPatient; }
     public void setStatut(String statut) { this.statut = statut; }
 }
-
