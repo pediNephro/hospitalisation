@@ -1,9 +1,9 @@
 pipeline {
     agent any
 
-   tools {
-    maven 'maven'
-}
+    tools {
+        maven 'maven'
+    }
 
     environment {
         IMAGE_NAME = "alaadiden/hospitalisation"
@@ -11,11 +11,7 @@ pipeline {
 
     stages {
 
-        stage('Clone') {
-            steps {
-                git 'https://github.com/pediNephro/hospitalisation.git'
-            }
-        }
+        // ❌ PAS BESOIN de stage Clone (Jenkins le fait déjà automatiquement)
 
         stage('Build & Test') {
             steps {
