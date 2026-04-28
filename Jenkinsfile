@@ -1,9 +1,9 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'Maven'
-    }
+   tools {
+    maven 'maven'
+}
 
     environment {
         IMAGE_NAME = "alaadiden/hospitalisation"
