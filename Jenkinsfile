@@ -19,13 +19,16 @@ pipeline {
             }
         }
 
-        stage('SonarQube') {
-            steps {
-                withSonarQubeEnv('sonarqube') {
-                    sh 'mvn sonar:sonar -Dsonar.projectKey=hospitalisation'
-                }
-            }
-        }
+     stage('SonarQube') {
+    steps {
+        sh '''
+        mvn sonar:sonar \
+        -Dsonar.projectKey=hospitalisation \
+        -Dsonar.host.url=http://host.docker.internal:9000 \
+        -Dsonar.login=squ_99856a122fbdbb675de3f19f1fe90af6fff82aa3
+        '''
+    }
+}
 
         stage('Docker Build') {
             steps {
