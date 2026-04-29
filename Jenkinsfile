@@ -7,6 +7,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "alaadiden/hospitalisation"
+        SONAR_TOKEN = "squ_99856a122fbdbb675de3f19f1fe90af6fff82aa3"
     }
 
     stages {
@@ -23,7 +24,7 @@ pipeline {
                 mvn sonar:sonar \
                 -Dsonar.projectKey=hospitalisation \
                 -Dsonar.host.url=http://host.docker.internal:9000 \
-                -Dsonar.login=squ_99856a122fbdbb675de3f19f1fe90af6fff82aa3
+                -Dsonar.login=$SONAR_TOKEN
                 '''
             }
         }
