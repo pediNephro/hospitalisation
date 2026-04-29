@@ -17,17 +17,16 @@ pipeline {
                 sh 'mvn clean install -DskipTests'
             }
         }
-
-        stage('SonarQube') {
-            steps {
-                sh '''
-                mvn sonar:sonar \
-                -Dsonar.projectKey=hospitalisation \
-                -Dsonar.host.url=http://host.docker.internal:9000 \
-                -Dsonar.login=$SONAR_TOKEN
-                '''
-            }
-        }
+stage('SonarQube') {
+    steps {
+        sh '''
+        mvn sonar:sonar \
+        -Dsonar.projectKey=hospitalisation \
+        -Dsonar.host.url=http://host.docker.internal:9000 \
+        -Dsonar.token=sqa_556b2759e920329773d50301181263ad63290bba
+        '''
+    }
+}
 
         stage('Docker Build') {
             steps {
