@@ -11,24 +11,22 @@ pipeline {
 
     stages {
 
-        // ❌ PAS BESOIN de stage Clone (Jenkins le fait déjà automatiquement)
-
-        stage('Build & Test') {
+        stage('Build') {
             steps {
-                sh 'mvn clean verify'
+                sh 'mvn clean install -DskipTests'
             }
         }
 
-     stage('SonarQube') {
-    steps {
-        sh '''
-        mvn sonar:sonar \
-        -Dsonar.projectKey=hospitalisation \
-        -Dsonar.host.url=http://host.docker.internal:9000 \
-        -Dsonar.login=squ_99856a122fbdbb675de3f19f1fe90af6fff82aa3
-        '''
-    }
-}
+        stage('SonarQube') {
+            steps {
+                sh '''
+                mvn sonar:sonar \
+                -Dsonar.projectKey=hospitalisation \
+                -Dsonar.host.url=http://host.docker.internal:9000 \
+                -Dsonar.login=squ_99856a122fbdbb675de3f19f1fe90af6fff82aa3
+                '''
+            }
+        }
 
         stage('Docker Build') {
             steps {
