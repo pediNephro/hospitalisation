@@ -7,7 +7,6 @@ pipeline {
 
     environment {
         IMAGE_NAME = "alaadiden/hospitalisation"
-        SONAR_TOKEN = "squ_99856a122fbdbb675de3f19f1fe90af6fff82aa3"
     }
 
     stages {
@@ -17,16 +16,19 @@ pipeline {
                 sh 'mvn clean install -DskipTests'
             }
         }
-stage('SonarQube') {
-    steps {
-        sh '''
-        mvn sonar:sonar \
-        -Dsonar.projectKey=hospitalisation \
-        -Dsonar.host.url=http://host.docker.internal:9000 \
-        -Dsonar.token=sqa_556b2759e920329773d50301181263ad63290bba
-        '''
-    }
-}
+
+        stage('SonarQube') {
+            steps {
+                withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+                    sh '''
+                    mvn sonar:sonar \
+                    -Dsonar.projectKey=hospitalisation \
+                    -Dsonar.host.url=http://host.docker.internal:9000 \
+                    -Dsonar.login=$SONAR_TOKEN
+                    '''
+                }
+            }
+        }
 
         stage('Docker Build') {
             steps {
