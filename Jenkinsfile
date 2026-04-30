@@ -52,5 +52,10 @@ pipeline {
         }
         
     }
+    stage('Trigger CD') {
+    steps {
+        build job: 'hospitalisation-cd'
+    }
+}
     
 }
