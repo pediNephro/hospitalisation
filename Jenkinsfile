@@ -50,5 +50,15 @@ pipeline {
                 }
             }
         }
+        stage('Deploy') {
+    steps {
+        sh '''
+        docker stop hospitalisation || true
+        docker rm hospitalisation || true
+        docker pull $IMAGE_NAME:latest
+        docker run -d -p 8089:8089 --name hospitalisation $IMAGE_NAME:latest
+        '''
     }
+    }
+
 }
