@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        IMAGE_NAME = "alaadiden/hospitalisation"
+        IMAGE_NAME = "alaadid/hospitalisation"
     }
 
     stages {
