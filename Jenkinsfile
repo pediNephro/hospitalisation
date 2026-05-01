@@ -23,7 +23,7 @@ pipeline {
                     sh """
                     mvn sonar:sonar \
                     -Dsonar.projectKey=hospitalisation \
-                    -Dsonar.host.url=http://host.docker.internal:9000 \
+                    -Dsonar.host.url=http://sonarqube:9000 \
                     -Dsonar.login=$SONAR_TOKEN
                     """
                 }
@@ -50,7 +50,8 @@ pipeline {
                 }
             }
         }
-         stage('Trigger CD') {
+
+        stage('Trigger CD') {
             steps {
                 build job: 'hospitalisation-cd'
             }
