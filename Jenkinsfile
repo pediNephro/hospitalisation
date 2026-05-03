@@ -20,13 +20,13 @@ pipeline {
         stage('SonarQube') {
             steps {
                 withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
-                    sh """
+                    sh '''
                     mvn sonar:sonar \
                     -Dsonar.projectKey=hospitalisation \
-                    -Dsonar.host.url=http://sonarqube:9000 \
+                    -Dsonar.host.url=http://192.168.56.10:9000 \
                     -Dsonar.login=$SONAR_TOKEN \
                     -DskipTests
-                    """
+                    '''
                 }
             }
         }
@@ -44,10 +44,10 @@ pipeline {
                     usernameVariable: 'USER',
                     passwordVariable: 'PASS'
                 )]) {
-                    sh """
+                    sh '''
                     echo $PASS | docker login -u $USER --password-stdin
                     docker push $IMAGE_NAME:latest
-                    """
+                    '''
                 }
             }
         }
