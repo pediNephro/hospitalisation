@@ -11,9 +11,9 @@ pipeline {
 
     stages {
 
-        stage('Build') {
+        stage('Build & Test') {
             steps {
-                sh 'mvn clean install -Dmaven.test.skip=true'
+                sh 'mvn clean verify'
             }
         }
 
@@ -25,7 +25,7 @@ pipeline {
                     -Dsonar.projectKey=hospitalisation \
                     -Dsonar.host.url=http://192.168.56.10:9000 \
                     -Dsonar.login=$SONAR_TOKEN \
-                    -DskipTests
+                    -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
                     '''
                 }
             }
