@@ -7,23 +7,40 @@ pipeline {
 
     stages {
 
+        stage('Prepare Network') {
+            steps {
+                sh '''
+                docker network inspect my-network || docker network create my-network
+                '''
+            }
+        }
+
+        stage('Run MySQL') {
+            steps {
+                sh '''
+                docker rm -f mysql || true
+
+                docker run -d \
+                --name mysql \
+                --network my-network \
+                -e MYSQL_ROOT_PASSWORD=root \
+                -e MYSQL_DATABASE=hospitalisation \
+                mysql:8
+                '''
+            }
+        }
+
         stage('Pull Image') {
             steps {
                 sh 'docker pull $IMAGE_NAME:latest'
             }
         }
 
-        stage('Stop Old Container') {
+        stage('Run App') {
             steps {
                 sh '''
                 docker rm -f hospitalisation || true
-                '''
-            }
-        }
 
-        stage('Run Container') {
-            steps {
-                sh '''
                 docker run -d \
                 --name hospitalisation \
                 --network my-network \
