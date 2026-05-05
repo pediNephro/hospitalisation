@@ -7,7 +7,13 @@ pipeline {
 
     stages {
 
-        stage('Prepare Network') {
+        stage('Fix Docker Permission') {
+            steps {
+                sh 'chmod 666 /var/run/docker.sock || true'
+            }
+        }
+
+        stage('Create Network') {
             steps {
                 sh '''
                 docker network inspect my-network || docker network create my-network
