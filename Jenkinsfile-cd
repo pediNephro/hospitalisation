@@ -16,8 +16,7 @@ pipeline {
         stage('Stop Old Container') {
             steps {
                 sh '''
-                docker stop hospitalisation || true
-                docker rm hospitalisation || true
+                docker rm -f hospitalisation || true
                 '''
             }
         }
@@ -25,7 +24,11 @@ pipeline {
         stage('Run Container') {
             steps {
                 sh '''
-                docker run -d -p 8089:8089 --name hospitalisation $IMAGE_NAME:latest
+                docker run -d \
+                --name hospitalisation \
+                --network my-network \
+                -p 8089:8089 \
+                $IMAGE_NAME:latest
                 '''
             }
         }
