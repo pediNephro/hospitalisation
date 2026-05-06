@@ -66,7 +66,7 @@ pipeline {
 
             cd kubernetes-config
 
-            sed -i "s|alaadid/hospitalisation:.*|alaadid/hospitalisation:${BUILD_NUMBER}|g" hospitalisation.yaml
+           sed -i "s|alaadid/hospitalisation:.*|alaadid/hospitalisation:latest|g" hospitalisation.yaml
 
             git config user.email "jenkins@ci.com"
             git config user.name "Jenkins"
