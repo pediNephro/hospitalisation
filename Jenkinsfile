@@ -71,11 +71,11 @@ pipeline {
             git config user.email "jenkins@ci.com"
             git config user.name "Jenkins"
 
-            git add hospitalisation.yaml
+           git add hospitalisation.yaml
 
-            git commit -m "update hospitalisation image ${BUILD_NUMBER}"
+git commit -m "update hospitalisation image ${BUILD_NUMBER}" || true
 
-            git push
+git push || true
             '''
         }
     }
