@@ -22,16 +22,19 @@ pipeline {
             }
         }
 
-        stage('Deploy To Kubernetes') {
-            steps {
+      
+stage('Deploy To Kubernetes') {
+    steps {
 
-                sh '''
-                cd kubernetes-config
+        sh '''
+        cd kubernetes-config
 
-                kubectl apply -f hospitalisation.yaml
-                '''
-            }
-        }
+        docker exec minikube kubectl apply -f /hospitalisation.yaml
+        '''
+    }
+}
+
+
 
         stage('Verify Deployment') {
             steps {
