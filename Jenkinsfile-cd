@@ -1,59 +1,48 @@
+```groovy
 pipeline {
     agent any
 
-    environment {
-        IMAGE_NAME = "alaadid/hospitalisation"
-    }
-
     stages {
 
-        stage('Fix Docker Permission') {
+        stage('Clone Kubernetes Repo') {
             steps {
-                sh 'chmod 666 /var/run/docker.sock || true'
+
+                withCredentials([usernamePassword(
+                    credentialsId: 'github-creds',
+                    usernameVariable: 'GIT_USER',
+                    passwordVariable: 'GIT_PASS'
+                )]) {
+
+                    sh '''
+                    rm -rf kubernetes-config
+
+                    git clone https://$GIT_USER:$GIT_PASS@github.com/pediNephro/kubernetes-config.git
+                    '''
+                }
             }
         }
 
-        stage('Create Network') {
+        stage('Deploy To Kubernetes') {
             steps {
+
                 sh '''
-                docker network inspect my-network || docker network create my-network
+                cd kubernetes-config
+
+                kubectl apply -f hospitalisation.yaml
                 '''
             }
         }
 
-        stage('Run MySQL') {
+        stage('Verify Deployment') {
             steps {
+
                 sh '''
-                docker rm -f mysql || true
+                kubectl rollout status deployment/hospitalisation -n pedinephro
 
-                docker run -d \
-                --name mysql \
-                --network my-network \
-                -e MYSQL_ROOT_PASSWORD=root \
-                -e MYSQL_DATABASE=hospitalisation \
-                mysql:8
-                '''
-            }
-        }
-
-        stage('Pull Image') {
-            steps {
-                sh 'docker pull $IMAGE_NAME:latest'
-            }
-        }
-
-        stage('Run App') {
-            steps {
-                sh '''
-                docker rm -f hospitalisation || true
-
-                docker run -d \
-                --name hospitalisation \
-                --network my-network \
-                -p 8089:8089 \
-                $IMAGE_NAME:latest
+                kubectl get pods -n pedinephro
                 '''
             }
         }
     }
 }
+```

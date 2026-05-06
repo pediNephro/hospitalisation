@@ -51,6 +51,35 @@ pipeline {
                 }
             }
         }
+        stage('Update Kubernetes Repo') {
+    steps {
+        withCredentials([usernamePassword(
+            credentialsId: 'github-creds',
+            usernameVariable: 'GIT_USER',
+            passwordVariable: 'GIT_PASS'
+        )]) {
+
+            sh '''
+            rm -rf kubernetes-config
+
+            git clone https://$GIT_USER:$GIT_PASS@github.com/pediNephro/kubernetes-config.git
+
+            cd kubernetes-config
+
+            sed -i "s|alaadid/hospitalisation:.*|alaadid/hospitalisation:${BUILD_NUMBER}|g" hospitalisation.yaml
+
+            git config user.email "jenkins@ci.com"
+            git config user.name "Jenkins"
+
+            git add hospitalisation.yaml
+
+            git commit -m "update hospitalisation image ${BUILD_NUMBER}"
+
+            git push
+            '''
+        }
+    }
+}
 
         stage('Trigger CD') {
             steps {
