@@ -40,7 +40,7 @@ stage('Deploy To Kubernetes') {
             steps {
 
                 sh '''
-                kubectl rollout status deployment/hospitalisation -n pedinephro
+              kubectl rollout status deployment/hospitalisation -n pedinephro --timeout=60s
 
                 kubectl get pods -n pedinephro
                 '''
